@@ -11,7 +11,7 @@ const TranslationSchema = new Schema({
   createdAt: {
     type: String,
     default: () => {
-      return new Date(Date.now()).toLocaleDateString();
+      return new Date(Date.now());
     },
   },
 });
