@@ -5,7 +5,7 @@ const SearchPageForm = ({ data }) => {
   const router = useRouter();
 
   const [input, setInput] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredData, setFilteredData] = useState(null);
   const [isPagesHidden, setPagesHidden] = useState(false);
 
   const changePageHandler = (name) => {
@@ -13,13 +13,23 @@ const SearchPageForm = ({ data }) => {
   };
 
   useEffect(() => {
-    const filtFn = data.filter((data) => {
+    const filterByInput = data.filter((data) => {
       if (data.page.includes(input)) {
         return data;
       }
     });
-    setFilteredData(filtFn);
-  }, [input]);
+    const filterByDate = filterByInput
+      .map((obj) => {
+        return { ...obj, createdAt: new Date(obj.createdAt) };
+      })
+      .sort((objA, objB) => {
+        const a = Number(objA.createdAt);
+        const b = Number(objB.createdAt);
+
+        return b - a;
+      });
+    setFilteredData(filterByDate);
+  }, [input, data]);
 
   return (
     <div className="w-full max-w-screen-xl mx-auto px-6">
