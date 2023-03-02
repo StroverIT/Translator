@@ -16,7 +16,7 @@ const GetPageData = ({ data }) => {
       {data?.translations.map((translation) => {
         return (
           <FormComp
-            translation={translation}
+            data={translation}
             key={translation.en + translation.bg}
             pageId={data._id}
           />
@@ -26,10 +26,11 @@ const GetPageData = ({ data }) => {
   );
 };
 
-function FormComp({ translation, pageId }) {
+function FormComp({ data, pageId }) {
   const router = useRouter();
 
   const [isEdit, setEdit] = useState(false);
+  const [translation, setTranslation] = useState(data);
 
   const [inputs, setInputs] = useState({
     bg: translation.bg,
@@ -41,7 +42,9 @@ function FormComp({ translation, pageId }) {
       [e.target.name]: e.target.value,
     }));
   };
-  const submitHandler = async (translationId) => {
+
+  const submitHandler = async (translationId, e) => {
+    e.preventDefault();
     const res = await fetch("/api/editTranslation", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -63,8 +66,8 @@ function FormComp({ translation, pageId }) {
       toastError(data.error);
     }
     setEdit(false);
+    setTranslation(data.data);
     // Refreshing the page to the new route
-    router.replace(router.asPath);
   };
 
   const removeHandler = async (translationId) => {
@@ -89,7 +92,7 @@ function FormComp({ translation, pageId }) {
     router.replace(router.asPath);
   };
   return (
-    <div className=" flex items-center justify-between  text-2xl mt-9  border-b border-blue-200 pb-2">
+    <div className="flex items-center justify-between pb-2 text-2xl border-b border-blue-200 mt-9">
       <div className="flex gap-x-20">
         {!isEdit && (
           <>
@@ -122,8 +125,9 @@ function FormComp({ translation, pageId }) {
               handler={inputHandler}
             />
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-10 px-4 rounded"
-              onClick={() => submitHandler(translation._id)}
+              type="button"
+              className="px-4 my-10 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+              onClick={(e) => submitHandler(translation._id, e)}
             >
               Изпрати
             </button>
@@ -150,10 +154,10 @@ function FormComp({ translation, pageId }) {
 
 function TextData({ country, image, text }) {
   return (
-    <div className="relative break-all whitespace-pre-line max-w-sm ">
+    <div className="relative max-w-sm break-all whitespace-pre-line ">
       {text}
-      <div className="absolute -top-4 text-sm flex">
-        <div className="relative h-5 w-5">
+      <div className="absolute flex text-sm -top-4">
+        <div className="relative w-5 h-5">
           <Image src={`/icons/${image}.png`} fill alt="bulgarian flag" />
         </div>
         <div className="pl-1">{country}</div>
