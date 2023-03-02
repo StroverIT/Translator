@@ -9,9 +9,9 @@ import GetPageData from "../components/Forms/GetPageData";
 
 export default function Home({ data, specificPage }) {
   return (
-    <div className="h-screen w-screen ">
-      <main className="flex-col  px-20">
-        <div className="flex-center flex-col">
+    <div className="min-h-screen min-w-screen ">
+      <main className="flex-col px-20">
+        <div className="flex-col flex-center">
           <SearchPageForm data={data} />
           <WritingForm />
           <GetPageData data={specificPage} />
