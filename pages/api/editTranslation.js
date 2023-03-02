@@ -8,7 +8,7 @@ import { ObjectId } from "mongodb";
 export default async function handler(req, res) {
   const { translationId, bg, en } = req.body;
 
-  const messages = ["Успешно премахнато"];
+  const messages = ["Успешно сменено"];
   const randomNum = Math.floor(Math.random() * messages.length);
 
   try {
