@@ -45,16 +45,31 @@ const WritingForm = () => {
   }, [router]);
   useEffect(() => {
     (async function () {
-      const resChatGpt = await fetch("/api/openAiTranslation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: inputs.bg }),
-      });
-      const dataChat = await resChatGpt.json();
-      setInputs((prevState) => ({
-        ...prevState,
-        en: dataChat.text.trim(),
-      }));
+      try{
+        const resChatGpt = await fetch("/api/openAiTranslation", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: inputs.bg }),
+        });
+        const dataChat = await resChatGpt.json();
+        let text = dataChat.text.trim()
+        if(text.substring(0,7) == "Answer:"){
+          text = text.slice(8)
+          
+        }
+        setInputs((prevState) => ({
+          ...prevState,
+          en: text,
+        }));
+      }catch(e){
+        if(e){
+          setInputs((prevState) => ({
+            ...prevState,
+            en: e,
+          }));
+        }
+      }
+     
     })();
   }, [inputs.bg]);
   return (
