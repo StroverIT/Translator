@@ -18,8 +18,16 @@ export default async function handler(req, res) {
       { "translations._id": new ObjectId(translationId) },
       { $set: { "translations.$.bg": bg, "translations.$.en": en } }
     );
-
-    res.json({ message: messages[randomNum] });
+    const data = await Translation.findOne({
+      "translations._id": new ObjectId(translationId),
+    });
+    let found = {};
+    data.translations.forEach((data) => {
+      if (data._id == translationId) {
+        found = data;
+      }
+    });
+    res.json({ message: messages[randomNum], data: found });
   } catch (err) {
     console.log(err);
     res.json({ error: err.error });
