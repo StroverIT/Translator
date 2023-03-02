@@ -18,6 +18,7 @@ const WritingForm = () => {
   };
   const submitHandler = async (e) => {
     e.preventDefault();
+
     const res = await fetch("/api/createTranslation", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -42,6 +43,20 @@ const WritingForm = () => {
       setInputs((prevState) => ({ ...prevState, page: query }));
     }
   }, [router]);
+  useEffect(() => {
+    (async function () {
+      const resChatGpt = await fetch("/api/openAiTranslation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: inputs.bg }),
+      });
+      const dataChat = await resChatGpt.json();
+      setInputs((prevState) => ({
+        ...prevState,
+        en: dataChat.text.trim(),
+      }));
+    })();
+  }, [inputs.bg]);
   return (
     <form onSubmit={submitHandler} className="">
       <div className="mb-6">
