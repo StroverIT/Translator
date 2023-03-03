@@ -44,6 +44,7 @@ const WritingForm = () => {
     }
   }, [router]);
   useEffect(() => {
+    if (!inputs.bg) return;
     (async function () {
       const resChatGpt = await fetch("/api/openAiTranslation", {
         method: "POST",
