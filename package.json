@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "fs": "^0.0.1-security",
+    "fs-extra": "^11.1.0",
     "mongoose": "^7.0.0",
     "next": "13.2.3",
     "openai": "^3.2.1",
